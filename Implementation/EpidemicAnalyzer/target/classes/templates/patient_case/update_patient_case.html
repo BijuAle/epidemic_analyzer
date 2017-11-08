@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+    <head th:replace="fragments :: head"></head>
+    <body class="container">
+        <nav th:replace="fragments::navigation"></nav>
+        <h1>Update patient case</h1>
+        <form method = "POST" th:object="${patient}">
+            <div class="form-group">
+                <input th:field="*{firstName}" placeholder = "First name" th:value="${patient.firstName}"/>
+                <span th:errors="*{firstName}" class ="error"></span>
+            </div>
+            <div class="form-group">
+                <input th:field="*{middleName}" placeholder = "Middle name" th:value="${patient.middleName}"/>
+                <span th:errors="*{middleName}" class ="error"></span>
+            </div>
+            <div class="form-group">
+                <input th:field="*{lastName}" placeholder = "Last name" th:value="${patient.lastName}"/>
+                <span th:errors="*{lastName}" class ="error"></span>
+            </div>
+            <div class="form-group">
+                <input th:field = "${patient.address.district}" placeholder = "District" required = "required"/>
+                <span th:errors="${patient.address.district}" class = "error" ></span>
+            </div>
+            <div class="form-group">
+                <input th:field = "${patient.address.vdc}" placeholder = "VDC" required = "required"/>
+                <span th:errors="${patient.address.vdc}" class = "error"></span>
+            </div>
+            <div class="form-group">
+                <input th:field = "${patient.address.wardNo}" placeholder = "Ward No" type = "number" min = "1" max ="9"/>
+                <span th:errors="${patient.address.wardNo}" class = "error"></span>
+            </div>
+            <div class="form-group">
+                <label class="label label-default">GPS Latitude</label>
+                <input th:field = "${patient.address.latitude}" placeholder = "Latitude"/>
+                <span th:errors="${patient.address.latitude}" class = "error"></span>
+            </div>
+            <div class="form-group">
+                <label class="label label-default">GPS Longitude</label>
+                <input th:field = "${patient.address.longitude}" placeholder = "Longitude"/>
+                <span th:errors="${patient.address.longitude}" class = "error"></span>
+            </div>
+            <div class="form-group">
+                <input th:field="*{dob}" type = "date" placeholder = "Date of birth" th:value="${patient.dob}"/>
+                <span th:errors="*{dob}" class ="error"></span>
+            </div>
+            <div class="form-group">
+                <select th:field="*{gender}" placeholder = "Gender">
+                    <option th:each = "gender: ${genderList}"
+                            th:text="${gender.displayName}"
+                            th:value ="${gender}"></option>
+                </select>
+            </div>
+            <div class="form-group">
+                <select th:field="*{currentInfectionStatus}" placeholder = "Current Infection Status">
+                    <option th:each = "currentInfectionStatus: ${currentInfectionStatusList}"
+                            th:text="${currentInfectionStatus.displayName}"
+                            th:value ="${currentInfectionStatus}"></option>
+                </select>
+            </div>
+            <input class = "btn btn-success" type = "submit" value = "Update case"/>
+        </form>
+    </body>
+</html>

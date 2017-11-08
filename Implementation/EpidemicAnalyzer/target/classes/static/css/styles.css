@@ -1,0 +1,46 @@
+/*Importing font*/
+@font-face {
+    font-family: OFL Sorts Mill Goudy;
+    font-style: normal;
+    font-weight: normal;
+    src: url(../fonts/OFLGoudyStM-webfont.eot) format("embedded-opentype"),
+        url(../fonts/OFLGoudyStM-webfont.woff) format("woff"),
+        url(../fonts/OFLGoudyStM-webfont.svg) format("svg")
+}
+
+/*Basic Styling*/
+body,nav,h1,h2,h3,legend,button, input[type="submit"],input[type="button"], input[type="reset"],caption{
+    font-family: "OFL Sorts Mill Goudy";
+    text-transform: uppercase;
+    color:#113654;
+}
+.indexContent{
+    font-family:"Georgia";
+    font-size: 12px;
+    text-align: justify;
+    text-transform: none;
+    text-indent: 10px; 
+}
+p::first-letter {
+    font-size: 200%;
+    color: #8A2BE2;
+}
+#ea{
+    color: #8A2BE2;
+}
+blockquote{
+    text-align: right;
+
+}
+.InfectedMark{
+    background-color:#FFB2B2;
+}
+.RecoveredMark{
+    background-color:#E5E5FF;
+}
+.SusceptibleMark{
+    background-color:#DFF0D8;
+}
+body{
+    background:url("../images/symphony.png") fixed;
+}

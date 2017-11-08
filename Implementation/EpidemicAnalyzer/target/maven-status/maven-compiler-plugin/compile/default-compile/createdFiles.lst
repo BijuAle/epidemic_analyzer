@@ -1,0 +1,12 @@
+ea\biju\repo\AddressRepository.class
+ea\biju\controller\SIRModellingController.class
+ea\biju\model\Address.class
+ea\biju\repo\PatientRepository.class
+ea\biju\controller\IndexController.class
+ea\biju\enums\Gender.class
+ea\biju\enums\CurrentInfectionStatus.class
+ea\biju\Application.class
+ea\biju\security\SecurityConfig.class
+ea\biju\model\Patient.class
+ea\biju\controller\PatientCaseController.class
+ea\biju\controller\MapProjectionController.class

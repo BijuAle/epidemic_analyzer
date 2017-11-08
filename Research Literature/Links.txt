@@ -1,0 +1,31 @@
+Case Forms
+www.searo.who.int/entity/emergencies/.../who_case_investigation_form.pdf
+https://www.ncbi.nlm.nih.gov/books/NBK143263/
+www.who.int/vaccine_safety/.../investigation/AEFI_Investigation_form_2Dec14.pdf
+
+SIR Modelling
+https://www.youtube.com/watch?v=JFS1SHGRDPY
+
+https://www.youtube.com/watch?v=qOgc22anNRM
+
+http://ocw.uci.edu/courses/math_113b_intro_to_mathematical_modeling_in_biology.html
+
+https://www.maa.org/press/periodicals/loci/joma/the-sir-model-for-spread-of-disease-the-differential-equation-model
+
+https://www.youtube.com/watch?v=5hi_AejMW0c
+
+https://www.youtube.com/watch?v=O9Npq6nq9R4
+
+https://www.youtube.com/playlist?list=PL9B9157E47AB3FDFA
+
+https://www.khanacademy.org/science/health-and-medicine/current-issues-in-health-and-medicine/ebola-outbreak/p/modelling-an-epidemic
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4976087/
+
+Graph
+https://github.com/devindia/graphapp/blob/master/GraphApp.java
+
+http://www.objectplanet.com/easycharts/examples.html
+
+
+Public Health Data
+http://www.nwcphp.org/training/opportunities/online-courses/part-2-basic-concepts-in-data-analysis-for-community-health-assessment

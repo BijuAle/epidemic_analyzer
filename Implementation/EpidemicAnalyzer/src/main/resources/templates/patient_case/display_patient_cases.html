@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+<body class="container">
+    <nav th:replace="fragments::navigation"></nav>
+    <h1>Patient case entries</h1>
+    <form method = "POST">
+        <table id = "patientcasetable" class = "table-condensed">
+            <thead>
+                <tr>
+                    <th role="button">Patient ID</th>
+                    <th role="button">Current infection status</th>
+                    <th role="button">First Name</th>
+                    <th role="button">Middle Name</th>
+                    <th role="button">Last Name</th>
+                    <th role="button">Date of Birth</th>
+                    <th role="button">Gender</th>
+                    <th role="button">District</th>
+                    <th role="button">VDC</th>
+                    <th role="button">Ward No</th>
+                    <th role="button">Lat.</th>
+                    <th role="button">Long.</th>
+                    <th role="button">Select</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="patient : ${patients}">
+                    <td th:text="${patient.id}"></td>
+                    <td th:text="${patient.currentInfectionStatus}"></td>
+                    <td th:text="${patient.firstName}"></td>
+                    <td th:text="${patient.middleName}"></td>
+                    <td th:text="${patient.lastName}"></td>
+                    <td th:text="${patient.dob}"></td>
+                    <td th:text="${patient.gender}"></td>
+                    <td th:text="${patient.address.district}"></td>
+                    <td th:text="${patient.address.vdc}"></td>
+                    <td th:text="${patient.address.wardNo}"></td>
+                    <td th:text="${patient.address.latitude}"></td>
+                    <td th:text="${patient.address.longitude}"></td>
+                    <td>
+                        <input type="checkbox" name="patientIds" th:value="${patient.id}" th:id="${patient.id}"/>
+                    </td>
+                    <td>
+                        <a class ="btn btn-success" th:href="@{update_patient_case/} + ${patient.id}">Update</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <input class="btn btn-danger" type="submit" value="Delete selected" onclick="return confirm('Confirm deletion?');"/>
+    </form>
+</body>
+</html>

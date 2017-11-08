@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>     
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+        <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="http://jsxgraph.uni-bayreuth.de/distrib/jsxgraph.css." />
+        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jsxgraph/0.99.6/jsxgraphcore.js"></script>
+        <style>
+            /*Importing font*/
+            @font-face {
+                font-family: OFL Sorts Mill Goudy;
+                font-style: normal;
+                font-weight: normal;
+                src: url(../fonts/OFLGoudyStM-webfont.eot) format("embedded-opentype"),
+                    url(../fonts/OFLGoudyStM-webfont.woff) format("woff"),
+                    url(../fonts/OFLGoudyStM-webfont.svg) format("svg")
+            }
+
+            /*Basic Styling*/
+            nav,h1,h2,h3,legend,button, input[type="submit"],input[type="button"], input[type="reset"],caption{
+                font-family: "OFL Sorts Mill Goudy";
+                text-transform: uppercase;
+                color:#113654;
+            }
+            body{
+                background:url("../images/symphony.png") fixed;
+                font-family: "Georgia";
+            }
+        </style>
+    </head>
+    <body class="container">
+        <nav th:replace="fragments::navigation"></nav>
+        <h1>SIR Modelling</h1>
+        <form><input class = "btn btn-primary" type="button" value="clear and run a simulation of 200 days"     onClick="clearturtle();run()"/>
+            <input class = "btn" type="button" value="stop" onClick="stop()"/>
+            <input class = "btn" type="button" value="continue" onClick="goOn()"/>
+        </form>
+        <input id="myInput" type="number" th:value="${population}"/>
+        <button class = "btn" onclick = "loadPopulation()">Set population</button>
+        <div id='jxgbox' class='jxgbox' style='width:700px; height:500px;'></div>
+        <div>Legend:
+            <div>* <span style="color:Blue">Blue: Rate of susceptible population</span></div>
+            <div>  * <span style="color:red">Red: Rate of infected population</span></div>
+            <div> * <span style="color:green">Green: Rate of recovered population</span></div>
+        </div>
+        <script>
+            /*<![CDATA[*/
+            /*
+             * Author: @Biju Ale
+             var brd -boundingbox parameters:
+             [a, b, c, d]
+             a = y-axis horizontal pos ('-' pull in),
+             b = y-axis height limit
+             c = x-axis width limit
+             d = y-axis scale (division size)
+             */
+            var population = 1000000;
+            function loadPopulation() {
+                var _population = document.getElementById("myInput").value;
+                if (_population * 1 !== population * 1) {
+                    population = _population * 1;
+                }
+            }
+            var brd = JXG.JSXGraph.initBoard('jxgbox', {boundingbox: [-9.66, 1.1, 246.66, -0.5], axis: true});
+
+            var S = brd.create('turtle', [], {strokeColor: 'blue', strokeWidth: 3});
+            var I = brd.create('turtle', [], {strokeColor: 'red', strokeWidth: 3});
+            var R = brd.create('turtle', [], {strokeColor: 'green', strokeWidth: 3});
+
+            /*
+             * Author: @Biju Ale
+             var brd - slider position parameters:
+             [[a, b], [c, d], [e, f, g]]
+             a = horizontal beginning edge
+             b = x-axis coordinate
+             c = slider length
+             d = y-axis coordinate
+             e = min value fopointerr slider
+             f = current value of slider pointer
+             g = max value for slider
+             */
+            var s = brd.create('slider', [[0, -0.1], [60, -0.1], [0, 1E-6, 1]], {name: 's'});
+            var beta = brd.create('slider', [[0, -0.2], [60, -0.2], [0, 0.2857, 1]], {name: '&beta;'});
+            var gamma = brd.create('slider', [[0, -0.3], [60, -0.3], [0, 0.1428, 0.5]], {name: '&gamma;'});
+            var mort = brd.create('slider', [[0, -0.4], [60, -0.4], [0, 0.0, 10.0]], {name: '% mortality'});
+
+            /*
+             * Author: @Biju Ale
+             var brd - text position parameters:
+             a = horizontal positioning (+: push-out, -: pull-in )
+             b = y-axis height limit
+             */
+            brd.create('text', [90, -0.1, "initially infected population rate"]);
+            brd.create('text', [90, -0.2, function () {
+                    return "&beta;: infection rate, R<sub>0</sub>=" + (beta.Value() / gamma.Value()).toFixed(2);
+                }]);
+            brd.create('text', [90, -0.3, function () {
+                    return "&gamma;: recovery rate = 1/(days of infection), days of infection= " + (1 / gamma.Value()).toFixed(1);
+                }]);
+
+            var t = 0; // global
+
+            brd.create('text', [90, 1.06,
+                function () {
+                    return "Day " + t +
+                            ": infected=" + (population * I.Y()).toFixed(1) +
+                            " recovered=" + (population * R.Y()).toFixed(1) +
+                            " dead=" + (population * R.Y() * mort.Value() * 0.01).toFixed(0);
+                }]);
+
+            S.hideTurtle();
+            I.hideTurtle();
+            R.hideTurtle();
+
+            function clearturtle() {
+                S.cs();
+                I.cs();
+                R.cs();
+
+                S.hideTurtle();
+                I.hideTurtle();
+                R.hideTurtle();
+            }
+            function run() {
+                S.setPos(0, 1.0 - s.Value());
+                R.setPos(0, 0);
+                I.setPos(0, s.Value());
+
+                delta = 1; // global
+                t = 0;  // global
+                loop();
+            }
+            function loop() {
+                var dS = -beta.Value() * S.Y() * I.Y();
+                var dR = gamma.Value() * I.Y();
+                var dI = -(dS + dR);
+                turtleMove(S, delta, dS);
+                turtleMove(R, delta, dR);
+                turtleMove(I, delta, dI);
+
+                t += delta;
+                if (t < 200.0) {
+                    active = setTimeout(loop, 10);
+                }
+            }
+            function turtleMove(turtle, dx, dy) {
+                turtle.moveTo([dx + turtle.X(), dy + turtle.Y()]);
+            }
+            function stop() {
+                if (active)
+                    clearTimeout(active);
+                active = null;
+            }
+            function goOn() {
+                if (t > 0) {
+                    if (active == null) {
+                        active = setTimeout(loop, 10);
+                    }
+                } else {
+                    run();
+                }
+
+            }
+            /*]]>*/
+        </script>
+    </body>
+</html>
